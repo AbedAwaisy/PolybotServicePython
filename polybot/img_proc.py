@@ -1,5 +1,7 @@
 from pathlib import Path
 from matplotlib.image import imread, imsave
+import random
+import numpy as np
 
 
 def rgb2gray(rgb):
@@ -52,16 +54,38 @@ class Img:
 
     def rotate(self):
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        self.data = np.rot90(self.data, k=-1).tolist()
 
     def salt_n_pepper(self):
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        height = len(self.data)
+        width = len(self.data[0])
+        for i in range(height):
+            for j in range(width):
+                rand = random.random()
+                if rand < 0.2:
+                    self.data[i][j] = 255  # Salt
+                elif rand > 0.8:
+                    self.data[i][j] = 0  # Pepper
 
     def concat(self, other_img, direction='horizontal'):
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        if direction == 'horizontal':
+            if len(self.data) != len(other_img.data):
+                raise RuntimeError("Image heights do not match for horizontal concatenation.")
+            self.data = [row1 + row2 for row1, row2 in zip(self.data, other_img.data)]
+        elif direction == 'vertical':
+            if len(self.data[0]) != len(other_img.data[0]):
+                raise RuntimeError("Image widths do not match for vertical concatenation.")
+            self.data = self.data + other_img.data
+        else:
+            raise ValueError("Invalid direction. Use 'horizontal' or 'vertical'.")
 
     def segment(self):
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                if self.data[i][j] > 100:
+                    self.data[i][j] = 255
+                else:
+                    self.data[i][j] = 0

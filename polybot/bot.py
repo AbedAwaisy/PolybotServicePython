@@ -75,4 +75,43 @@ class QuoteBot(Bot):
 
 
 class ImageProcessingBot(Bot):
-    pass
+    def handle_message(self, msg):
+        logger.info(f'Incoming message: {msg}')
+
+        try:
+            if self.is_current_msg_photo(msg):
+                photo_path = self.download_user_photo(msg)
+                caption = msg.get('caption', '').strip()
+
+                if caption not in ['Blur', 'Contour', 'Rotate', 'Segment', 'Salt and pepper', 'Concat']:
+                    self.send_text(msg['chat']['id'],
+                                   "Unsupported caption. Please use one of the following: Blur, Contour, Rotate, Segment, Salt and pepper, Concat")
+                    return
+
+                img = Img(photo_path)
+
+                if caption == 'Blur':
+                    img.blur()
+                elif caption == 'Contour':
+                    img.contour()
+                elif caption == 'Rotate':
+                    img.rotate()
+                elif caption == 'Segment':
+                    img.segment()
+                elif caption == 'Salt and pepper':
+                    img.salt_n_pepper()
+                elif caption == 'Concat':
+                    # Handle concatenation, but since we need another image, it's better to skip this here
+                    self.send_text(msg['chat']['id'], "Concat operation requires another image. Not implemented.")
+                    return
+
+                new_path = img.save_img()
+                self.send_photo(msg['chat']['id'], new_path)
+
+            else:
+                self.send_text(msg['chat']['id'], "Please send a photo with a caption for processing.")
+
+        except Exception as e:
+            logger.error(f'Error processing message: {e}')
+            self.send_text(msg['chat']['id'], "Something went wrong... please try again.")
+
