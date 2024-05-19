@@ -101,9 +101,7 @@ class ImageProcessingBot(Bot):
                 elif caption == 'Salt and pepper':
                     img.salt_n_pepper()
                 elif caption == 'Concat':
-                    # Handle concatenation, but since we need another image, it's better to skip this here
-                    self.send_text(msg['chat']['id'], "Concat operation requires another image. Not implemented.")
-                    return
+                    img.concat(img)
 
                 new_path = img.save_img()
                 self.send_photo(msg['chat']['id'], new_path)
