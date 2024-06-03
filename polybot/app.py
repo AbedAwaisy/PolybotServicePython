@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/', methods=['GET'])
 def index():
-    return 'Ok'
+    return 'Ok GUYS!'
 
 
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
