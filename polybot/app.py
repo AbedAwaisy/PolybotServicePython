@@ -32,6 +32,6 @@ if __name__ == "__main__":
     # bot = Bot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
     # bot = QuoteBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
     bot = ImageProcessingBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
-    app.run(host='0.0.0.0', ssl_context=('/home/ubuntu/prod-bot.pem', '/home/ubuntu/prod-bot.key') , port=8443)
+    app.run(host='0.0.0.0', ssl_context=('/home/ubuntu/bot.pem', '/home/ubuntu/bot.key') , port=8443)
 
 
